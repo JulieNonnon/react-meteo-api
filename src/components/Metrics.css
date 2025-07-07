@@ -1,0 +1,51 @@
+.metrics-container {
+  margin-top: 2rem;
+  padding: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  gap: 1rem;
+}
+
+.search-container input {
+  padding: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 1rem;
+}
+
+.metrics-card {
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  text-align: center;
+  background-color: #f2f2f2;
+  border-radius: 8px;
+  width: 150px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.icon {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.label {
+  font-weight: bold;
+}
+
+.value {
+  color: #555;
+}

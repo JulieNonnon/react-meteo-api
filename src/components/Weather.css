@@ -1,0 +1,17 @@
+.weather-container {
+  border: 1px solid lightgray;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  max-width: 300px;
+  margin-top: 1rem;
+  background-color: #f9f9f9;
+}
+
+.weather-title {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.weather-info {
+  margin: 0.25rem 0;
+}
