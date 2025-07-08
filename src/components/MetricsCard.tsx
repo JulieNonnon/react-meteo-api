@@ -1,11 +1,5 @@
 import React from 'react';
 
-// type Props = {
-//   label: string;
-//   value: string;
-//   icon: string;
-// };
-
 type MetricsCardProps = {
   label: string;
   value: string;

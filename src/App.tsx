@@ -8,13 +8,23 @@ import { fetchCityCoordinates } from './services/data';
 function App() {
   const [cityName, setCityName] = useState('Paris');
   const [coordinates, setCoordinates] = useState({ latitude: 48.8566, longitude: 2.3522 });
+  const [countryCode, setCountrycode] =useState('FR')
 
+  //Fonction pour que la ville retournée ait sa première lettre en majuscule par défaut (idem pour ville ayant un nom composé (ex: "Baton Rouge"))
+  function capitalizeWords(str: string) {
+  return str
+    .toLowerCase()
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+  }
   // Fonction déclenchée par la barre de recherche
   async function handleSearch(city: string) {
     try {
-      const { latitude, longitude } = await fetchCityCoordinates(city);
-      setCityName(city);
+      const { latitude, longitude, countryCode } = await fetchCityCoordinates(city);
+      setCityName(capitalizeWords(city)); // ville avec majuscule
       setCoordinates({ latitude, longitude });
+      setCountrycode(countryCode)
     } catch (error) {
       console.error("Erreur lors de la recherche de la ville :", error);
       alert("Ville non trouvée. Veuillez réessayer.");
@@ -22,11 +32,17 @@ function App() {
   }
 
   return (
-    <div className="App">
+    <div className="app-container">
       <Header onSearch={handleSearch} />
-      <h2>Météo à {cityName}</h2>
-      <Weather latitude={coordinates.latitude} longitude={coordinates.longitude} />
-      <Metrics latitude={coordinates.latitude} longitude={coordinates.longitude} />
+      <div className="component-container">
+        <Weather
+          latitude={coordinates.latitude}
+          longitude={coordinates.longitude}
+          city={cityName}
+          countryCode={countryCode}
+        />
+        <Metrics latitude={coordinates.latitude} longitude={coordinates.longitude} />
+      </div>
     </div>
   );
 }

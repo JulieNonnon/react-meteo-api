@@ -1,41 +1,54 @@
 import React, { useEffect, useState } from 'react';
 import { fetchWeatherData } from '../services/data';
+import MeteoCodeMapping from '../services/meteoCodeMapping';
+import './Weather.css';
 
 type WeatherProps = {
   latitude: number;
   longitude: number;
+  city: string;
+  countryCode: string;
 };
 
-const Weather: React.FC<WeatherProps> = ({ latitude, longitude }) => {
-  const [weather, setWeather] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+const Weather: React.FC<WeatherProps> = ({ latitude, longitude, city, countryCode }) => {
+  const [temperature, setTemperature] = useState<number | null>(null);
+  const [weatherCode, setWeatherCode] = useState<number | null>(null);
 
   useEffect(() => {
-    const loadData = async () => {
+    const fetchData = async () => {
       try {
         const data = await fetchWeatherData(latitude, longitude);
-        setWeather(data);
-      } catch (err) {
-        setError('Impossible de charger les données météo');
-      } finally {
-        setLoading(false);
+        setTemperature(data.current.temperature_2m);
+        setWeatherCode(data.current.weather_code);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des données météo :", error);
       }
     };
 
-    loadData();
+    fetchData();
   }, [latitude, longitude]);
 
-  if (loading) return <p>Chargement...</p>;
-  if (error) return <p>{error}</p>;
+  const meteo = weatherCode !== null ? MeteoCodeMapping[weatherCode] : null;
 
-  return (
-    <div>
-      <h2>Température actuelle : {weather.current.temperature_2m}°C</h2>
-      {/* Autres infos météo ici */}
+return (
+    <div className="weather-container">
+      <h2>
+        Météo à {city}, {countryCode}
+      </h2>
+      <p>Température actuelle : {temperature}°C</p>
+
+      {meteo && (
+        <div className="weather-details">
+          <img
+            src={`/iconsMeteo/${meteo.icon}.svg`}
+            alt={meteo.desc}
+            className="weather-icon"
+          />
+          <p className="weather-description">{meteo.desc}</p>
+        </div>
+      )}
     </div>
   );
 };
 
 export default Weather;
-
