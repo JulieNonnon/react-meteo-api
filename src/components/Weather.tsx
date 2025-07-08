@@ -40,7 +40,8 @@ return (
       {meteo && (
         <div className="weather-details">
           <img
-            src={`/iconsMeteo/${meteo.icon}.svg`}
+            // src={`/iconsMeteo/${meteo.icon}.svg`}
+            src={`${import.meta.env.BASE_URL}iconsMeteo/${meteo.icon}.svg`}
             alt={meteo.desc}
             className="weather-icon"
           />
