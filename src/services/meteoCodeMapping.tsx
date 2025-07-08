@@ -1,4 +1,11 @@
-const MeteoCodeMapping = {
+// interface pour typer le mapping correctement avec des clés numériques
+export interface MeteoInfo {
+  desc: string;
+  icon: string;
+}
+
+// le mapping a des clés numériques littérales, nécessaire de typer correctement le mapping avec l'interface ci-dessus
+export const MeteoCodeMapping: { [key: number]: MeteoInfo } = {
   0:  { desc: "Clear sky", icon: "0-wi-day-sunny" },
   1:  { desc: "Mainly clear", icon: "1-wi-day-cloudy" },
   2:  { desc: "Partly cloudy", icon: "2-wi-day-cloudy" },

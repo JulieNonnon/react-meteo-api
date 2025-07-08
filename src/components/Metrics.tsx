@@ -1,100 +1,93 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { fetchWeatherData } from '../services/data';
 import MetricsCard from './MetricsCard';
 import './Metrics.css';
-//import Header from './Header';
 
 type MetricsProps = {
     latitude: number;
     longitude: number;
 };
 
-type WeatherData = {
-  current: {
-    relative_humidity_2m: number;
-    wind_speed_10m: number;
-    wind_direction_10m: number;
-  };
-  hourly: {
-    visibility: number[];
-  };
-  daily: {
-    sunrise: string[];
-    sunset: string[];
-  };
-};
+// type WeatherData = {
+//   current: {
+//     relative_humidity_2m: number;
+//     wind_speed_10m: number;
+//     wind_direction_10m: number;
+//   };
+//   hourly: {
+//     visibility: number[];
+//   };
+//   daily: {
+//     sunrise: string[];
+//     sunset: string[];
+//   };
+// };
     
-const Metrics: React.FC<MetricsProps> = ({ latitude, longitude }) => {
-    const [weather, setWeather] = useState<WeatherData | null>(null);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
+// const Metrics: React.FC<MetricsProps> = ({ latitude, longitude }) => {
+//     const [weather, setWeather] = useState<WeatherData | null>(null);
+//     const [loading, setLoading] = useState(false);
+//     const [error, setError] = useState('');
+
+const Metrics = ({ latitude, longitude }: MetricsProps) => {
+  const [data, setData] = useState<any>(null);
+
+// useEffect(() => {
+//     const getData = async () => {
+//       setLoading(true);
+//       setError('');
+//       try {
+//         const data = await fetchWeatherData(latitude, longitude);
+//         setWeather(data);
+//       } catch (err) {
+//         setError('Erreur lors du chargement des données météo');
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
 
 useEffect(() => {
-    const getData = async () => {
-      setLoading(true);
-      setError('');
+    const getMetrics = async () => {
       try {
-        const data = await fetchWeatherData(latitude, longitude);
-        setWeather(data);
-      } catch (err) {
-        setError('Erreur lors du chargement des données météo');
-      } finally {
-        setLoading(false);
+        const response = await fetchWeatherData(latitude, longitude);
+        setData(response);
+      } catch (error) {
+        console.error('Erreur lors de la récupération des données météo:', error);
       }
     };
 
-    getData();
+  getMetrics();
   }, [latitude, longitude]);
 
-  if (loading) return <p>Chargement des données...</p>;
-  if (error) return <p>{error}</p>;
-  if (!weather) return null;
+  if (!data || !data.current) return <p>Chargement des métriques...</p>;
 
-  // Exemple de valeurs extraites
-  const humidity = weather.current.relative_humidity_2m;
-  const windSpeed = weather.current.wind_speed_10m;
-  const windDirection = weather.current.wind_direction_10m;
-  const visibility = weather.hourly.visibility[0]; // première heure
-  const sunrise = weather.daily.sunrise[0];
-  const sunset = weather.daily.sunset[0];
+  const humidity = data.current.relative_humidity_2m;
+  const windSpeed = data.current.wind_speed_10m;
+  const windDirection = data.current.wind_direction_10m;
+  const visibility = data.hourly?.visibility?.[0];
+  const sunrise = data.daily?.sunrise?.[0];
+  const sunset = data.daily?.sunset?.[0];
 
-  const metrics = [
-    { icon: "💧", label: 'Humidité', value: `${humidity} %` },
+  const metricsList = [
+    { icon: "💧", label: 'Humidité', value: `${humidity}%` },
     { icon: "💨", label: 'Vent', value: `${windSpeed} km/h` },
     { icon: "🧭", label: 'Direction du vent', value: `${windDirection}°` },
-    { icon: "👀", label: 'Visibilité', value: `${visibility} m` },
-    { icon: "🌅", label: 'Lever du soleil', value: new Date(sunrise).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) },
-    { icon: "🌇", label: 'Coucher du soleil', value: new Date(sunset).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) },
+    { icon: "👀", label: 'Visibilité', value: visibility ? `${visibility} m` : 'N/A' },
+    { icon: "🌅", label: 'Lever du soleil', value: sunrise ? new Date(sunrise).toLocaleTimeString() : 'N/A' },
+    { icon: "🌇", label: 'Coucher du soleil', value: sunset ? new Date(sunset).toLocaleTimeString() : 'N/A'},
   ];
-    
+
   return (
-    <div className="metrics-container">
-      {metrics.map((metric, index) => (
-        <MetricsCard key={index} icon={metric.icon} label={metric.label} value={metric.value} />
+    <div className="metrics-grid">
+      {metricsList.map((metric, index) => (
+        <MetricsCard 
+          key={index} 
+          icon={metric.icon} 
+          label={metric.label} 
+          value={metric.value} 
+        />
       ))}
     </div>
   );
 };
-
-//   const metrics = [
-//     { label: "Humidité", value: "60%", icon: "💧" },
-//     { label: "Vent", value: "12 km/h", icon: "💨" },
-//     { label: "Direction du vent", value: "Nord-Est", icon: "🧭" },
-//     { label: "Visibilité", value: "10 km", icon: "👀" },
-//     { label: "Lever du soleil", value: "06:12", icon: "🌅" },
-//     { label: "Coucher du soleil", value: "21:47", icon: "🌇" },
-//   ];
-
-//   return (
-//     <div className="metrics-container">
-//       <Header />
-//       <div className="metrics-grid">
-//         {metrics.map((metric, index) => (
-//           <MetricsCard key={index} {...metric} />
-//         ))}
-//       </div>
-//     </div>
-//   );
-//};
 
 export default Metrics;

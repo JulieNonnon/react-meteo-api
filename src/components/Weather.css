@@ -1,17 +1,28 @@
 .weather-container {
-  border: 1px solid lightgray;
+  /* border: solid red 1px; */
+  text-align: center;
   padding: 1rem;
   border-radius: 0.5rem;
   max-width: 300px;
   margin-top: 1rem;
-  background-color: #f9f9f9;
+  background-color: #f2f2f2;
 }
 
-.weather-title {
-  font-size: 1.25rem;
-  margin-bottom: 0.5rem;
+.weather-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 10px;
 }
 
-.weather-info {
-  margin: 0.25rem 0;
+.weather-icon {
+  width: 12rem;
+  height: 12rem;
+}
+
+.weather-description {
+  font-size: 1.2rem;
+  font-weight: bold;
 }
