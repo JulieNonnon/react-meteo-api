@@ -32,10 +32,8 @@ const Weather: React.FC<WeatherProps> = ({ latitude, longitude, city, countryCod
 
 return (
     <div className="weather-container">
-      <h2>
-        Météo à {city}, {countryCode}
-      </h2>
-      <p>Température actuelle : {temperature}°C</p>
+      <h2>{city}, {countryCode}</h2>
+      <p className="weather-temp">{temperature}°C</p>
 
       {meteo && (
         <div className="weather-details">
